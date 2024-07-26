@@ -1,0 +1,20 @@
+name: Build
+
+on:
+  pull_request:
+  push:
+    branches: ['**']
+
+jobs:
+  nextflow:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: MillironX/setup-nextflow@v1
+      # On validates flow:
+      #   Confirms workflow is valid
+      #   Confirms all containers are available
+      - name: Validate workflow
+        # replace with command to execute sample
+        run: |
+          nextflow -version
