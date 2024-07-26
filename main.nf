@@ -177,7 +177,7 @@ process ascat_counts {
         path('ref')
         path('snp.gc')
         path('sex.loci')
-        tuple val(groupId), val(type), val(sampleId), val(protocol), val(platform), file(htsfile), file(htsidx), file(htsStats)
+        tuple val(groupId), val(type), val(sampleId), val(protocol), val(platform), file(htsfile), file(htsidx)
 
     output:
         tuple path("${sampleId}.count.gz"), path("${sampleId}.count.gz.tbi")
@@ -269,7 +269,7 @@ workflow {
 
     pairs = Channel.fromPath(params.pairs)
 
-    case_control_map = pairs.splitCsv(header: true).map { row -> tuple(row.groupId, row.type, row.sampleId, row.protocol, row.platform, file(row.reads), file(row.readIdx), file(row.readStats)) }
+    case_control_map = pairs.splitCsv(header: true).map { row -> tuple(row.groupId, row.type, row.sampleId, row.protocol, row.platform, file(row.reads), file(row.readIdx)) }
 
     main:
         obtain_pipeline_metadata(
