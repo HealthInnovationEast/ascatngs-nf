@@ -272,24 +272,24 @@ workflow {
     case_control_map = pairs.splitCsv(header: true).map { row -> tuple(row.groupId, row.type, row.sampleId, row.protocol, row.platform, file(row.reads), file(row.readIdx)) }
 
     main:
-        obtain_pipeline_metadata(
-            ch_repository,
-            ch_commitId,
-            ch_revision,
-            ch_scriptName,
-            ch_scriptFile,
-            ch_projectDir,
-            ch_launchDir,
-            ch_workDir,
-            ch_userName,
-            ch_commandLine,
-            ch_configFiles,
-            ch_profile,
-            ch_container,
-            ch_containerEngine,
-            ch_raci_owner,
-            ch_domain_keywords
-        )
+        // obtain_pipeline_metadata(
+        //     ch_repository,
+        //     ch_commitId,
+        //     ch_revision,
+        //     ch_scriptName,
+        //     ch_scriptFile,
+        //     ch_projectDir,
+        //     ch_launchDir,
+        //     ch_workDir,
+        //     ch_userName,
+        //     ch_commandLine,
+        //     ch_configFiles,
+        //     ch_profile,
+        //     ch_container,
+        //     ch_containerEngine,
+        //     ch_raci_owner,
+        //     ch_domain_keywords
+        // )
 
         prep_ref(
             core_ref,
