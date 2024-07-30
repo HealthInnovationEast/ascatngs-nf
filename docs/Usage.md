@@ -15,9 +15,25 @@ All links here are pinned to the version of XXXX that this nextflow has been cre
 
 Workflow would fail if these are not defined
 
-### `--some_required_param`
+### `--inputs`
 
-Description & conditions
+CSV file with header of:
+
+```
+groupId,sampleId,type,protocol,platform,reads,readIdx,purity,ploidy
+```
+
+- groupId = Links tumour & normal samples
+- sampleId = Name of the sample
+- type = case/control
+- protocol = e.g. WGS, WES
+- platform = e.g. ILLUMINA
+- reads = BAM/CRAM file or counts.gz file from previous run.
+- readIdx = BAM/CRAM index file, `NA` when counts.gz used.
+- purity = Purity (rho) setting for manual setting of sunrise plot location
+- ploidy = Ploidy (psi) setting for manual setting of sunrise plot location
+
+Set purity & ploidy to `NA` if running unguided.
 
 ## Optional args
 
