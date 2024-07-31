@@ -87,18 +87,19 @@ process ascat_counts {
         path('genome.fa.fai')
         path('snp.gc')
         path('sex.loci')
-        tuple val(groupId), val(type), val(sampleId), val(protocol), val(platform), file(htsfile), file(htsidx), val(purity), val(ploidy)
+        tuple val(groupId), val(type), val(sampleId), val(protocol), val(platform), file(htsfile), file(htsidx), val(purity), val(ploidy), file(isMale)
 
     output:
         tuple path("${sampleId}.count.gz"), path("${sampleId}.count.gz.tbi")
         path("${sampleId}.is_male.txt")
-        tuple val(groupId), val(type), val(sampleId), val(protocol), val(platform), path("${sampleId}.count.gz"), path("${sampleId}.count.gz.tbi"), path("${sampleId}.is_male.txt"), val(purity), val(ploidy), emit: to_ascat
+        tuple val(groupId), val(type), val(sampleId), val(protocol), val(platform), path("${sampleId}.count.gz"), path("${sampleId}.count.gz.tbi"), val(purity), val(ploidy), path("${sampleId}.is_male.txt"), emit: to_ascat
 
     // makes sure pipelines fail properly, plus errors and undef values
     shell = ['/bin/bash', '-euo', 'pipefail']
 
     stub:
         """
+        echo ">>>ascat_counts htsfile: ${htsfile}"
         touch ${sampleId}.count.gz
         touch ${sampleId}.count.gz.tbi
         touch ${sampleId}.is_male.txt
@@ -123,7 +124,7 @@ process ascat {
         path('genome.fa.fai')
         path('genome.fa.dict')
         path('snp.gc')
-        tuple val(groupId), val(types), val(sampleIds), val(protocol), val(platform), path(counts), path(indexes), path(ismale), val(purity), val(ploidy)
+        tuple val(groupId), val(types), val(sampleIds), val(protocol), val(platform), path(counts), path(indexes), val(purity), val(ploidy), path(isMale)
 
     output:
         tuple path('*.copynumber.caveman.vcf.gz'), path('*.copynumber.caveman.vcf.gz.tbi')
@@ -131,6 +132,7 @@ process ascat {
         tuple val(groupId), path('*.copynumber.caveman.csv'), path('*.samplestatistics.txt'), emit: ascat_for_caveman
         path('*.copynumber.txt.gz')
         tuple path("*.count.gz", includeInputs: true), path("*.count.gz.tbi", includeInputs: true)
+        path('*.is_male.txt', includeInputs: true)
 
     publishDir {
         def case_idx = types.indexOf('case')
@@ -148,8 +150,12 @@ process ascat {
         def ploidy_val = ploidy[case_idx] != 'NA' ? "--ploidy ${ploidy[case_idx]}" : ''
 
         """
-        echo purity: ${purity_val}
-        echo ploidy: ${ploidy_val}
+        echo ">>>ascat purity: ${purity_val}"
+        echo ">>>ascat ploidy: ${ploidy_val}"
+        echo ">>>ascat tumour: ${counts[case_idx]}"
+        echo ">>>ascat normal: ${counts[ctrl_idx]}"
+        echo ">>>ascat tumour: ${isMale[case_idx]}"
+        echo ">>>ascat normal: ${isMale[ctrl_idx]}"
         touch ${sampleIds[case_idx]}_vs_${sampleIds[ctrl_idx]}.copynumber.caveman.vcf.gz
         touch ${sampleIds[case_idx]}_vs_${sampleIds[ctrl_idx]}.copynumber.caveman.vcf.gz.tbi
         touch ${sampleIds[case_idx]}_vs_${sampleIds[ctrl_idx]}.png
@@ -191,24 +197,41 @@ workflow {
     gender_snps  = file(params.gender_snps)
     snp_gc_corr  = file(params.snp_gc_corr)
 
-    pairs = Channel.fromPath(params.pairs)
-
-    case_control_map = pairs.splitCsv(header: true).map { row -> tuple(row.groupId, row.type, row.sampleId, row.protocol, row.platform, file(row.reads), file(row.readIdx), row.purity, row.ploidy) }
+    if(params.counts) {
+        // input is different to allow for count files and is_male files
+        pairs = Channel.fromPath(params.pairs)
+        case_control_map = pairs.splitCsv(header: true).map {
+            row -> tuple(row.groupId, row.type, row.sampleId, row.protocol, row.platform, file(row.reads), file(row.readIdx), row.purity, row.ploidy, file(row.isMale))
+        }
+    }
+    else {
+        pairs = Channel.fromPath(params.pairs)
+        case_control_map = pairs.splitCsv(header: true).map {
+            row -> tuple(row.groupId, row.type, row.sampleId, row.protocol, row.platform, file(row.reads), file(row.readIdx), row.purity, row.ploidy, file(row.isMale))
+        }
+    }
 
     main:
 
-        ascat_counts(
-            genome_fa,
-            genome_fai,
-            snp_gc_corr,
-            gender_snps,
-            case_control_map
-        )
+        if(params.counts) {
+            to_ascat = case_control_map
+        }
+        else {
+            ascat_counts(
+                genome_fa,
+                genome_fai,
+                snp_gc_corr,
+                gender_snps,
+                case_control_map
+            )
+            to_ascat = ascat_counts.out.to_ascat
+        }
+
         ascat(
             genome_fa,
             genome_fai,
             genome_dict,
             snp_gc_corr,
-            ascat_counts.out.to_ascat.groupTuple()
+            to_ascat.groupTuple()
         )
 }

@@ -28,10 +28,10 @@ groupId,sampleId,type,protocol,platform,reads,readIdx,purity,ploidy
 - type = case/control
 - protocol = e.g. WGS, WES
 - platform = e.g. ILLUMINA
-- reads = BAM/CRAM file or counts.gz file from previous run.
-- readIdx = BAM/CRAM index file, `NA` when counts.gz used.
-- purity = Purity (rho) setting for manual setting of sunrise plot location
-- ploidy = Ploidy (psi) setting for manual setting of sunrise plot location
+- reads = BAM/CRAM file
+- readIdx = BAM/CRAM index file
+- purity = NA or Purity (rho) setting for manual setting of sunrise plot location
+- ploidy = NA or Ploidy (psi) setting for manual setting of sunrise plot location
 
 Set purity & ploidy to `NA` if running unguided.
 
