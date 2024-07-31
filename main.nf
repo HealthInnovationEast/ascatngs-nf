@@ -32,9 +32,9 @@ summary['User']                                        = workflow.userName
 
 // then arguments
 summary['pairs']                                       = params.pairs
-summary['core_ref']                                    = params.core_ref
-summary['cvn_sv']                                      = params.cvn_sv
-summary['qc_genotype']                                 = params.qc_genotype
+summary['genome_fa']                                   = params.genome_fa
+summary['gender_snps']                                 = params.gender_snps
+summary['snp_gc_corr']                                 = params.snp_gc_corr
 
 log.info summary.collect { k,v -> "${k.padRight(18)}: $v" }.join("\n")
 log.info "-\033[2m--------------------------------------------------\033[0m-"
@@ -80,42 +80,6 @@ Channel
 /*-----------
   Processes
 --------------*/
-
-// process prep_ref {
-//     input:
-//         file(core_ref)
-//         file(cvn_sv)
-//         file(qc_genotype)
-
-//     output:
-//         path 'ref', type: 'dir', emit: ref
-//         path 'ascat/SnpGcCorrections.tsv', emit: snps_gc
-//         path 'gender.tsv', emit: snps_sex
-//         path'ref_cache', type: 'dir', emit: ref_cache
-
-//     shell = ['/bin/bash', '-euo', 'pipefail']
-
-//     stub:
-//         """
-//         mkdir -p ref
-//         touch ref/genome.{fa,fa.fai,fa.dict}
-//         mkdir -p ascat
-//         touch ascat/SnpGcCorrections.tsv
-//         touch gender.tsv
-//         mkdir -p ref_cache
-//         """
-
-//     script:
-//         """
-//         mkdir ref
-//         tar --strip-components 1 -C ref -zxvf $core_ref
-//         tar --strip-components 1 --no-anchored -zxvf $cvn_sv SnpGcCorrections.tsv
-//         tar --strip-components 1 --no-anchored -zxvf $qc_genotype gender.tsv
-
-//         # build ref-cache
-//         seq_cache_populate.pl -subdirs 2 -root ./ref_cache ref/genome.fa
-//         """
-// }
 
 process ascat_counts {
     input:
@@ -233,12 +197,6 @@ workflow {
 
     main:
 
-        // prep_ref(
-        //     core_ref,
-        //     cvn_sv,
-        //     qc_genotype
-        // )
-
         ascat_counts(
             genome_fa,
             genome_fai,
@@ -253,24 +211,4 @@ workflow {
             snp_gc_corr,
             ascat_counts.out.to_ascat.groupTuple()
         )
-
-    /*
-    STUB run
-    rm -rf results/* .nextflow* work
-    nextflow run main.nf \
-        -profile test -stub-run \
-        --core_ref data/core_ref_GRCh38_hla_decoy_ebv.tar.gz \
-        --cvn_sv data/CNV_SV_ref_GRCh38_hla_decoy_ebv_brass6+.tar.gz \
-        --qc_genotype data/qcGenotype_GRCh38_hla_decoy_ebv.tar.gz \
-        --pairs data/test.csv
-
-    rm -rf results/* .nextflow* work
-    nextflow run $HOME/git/HealthInnovationEast/ascatngs-nf/main.nf \
-        -profile test,singularity,slurm -resume \
-        --core_ref data/core_ref_GRCh38_hla_decoy_ebv.tar.gz \
-        --cvn_sv data/CNV_SV_ref_GRCh38_hla_decoy_ebv_brass6+.tar.gz \
-        --qc_genotype data/qcGenotype_GRCh38_hla_decoy_ebv.tar.gz \
-        --pairs /home/kr525/git/cynapse-ccri/cgpwgs-nf/test.csv
-    */
-
 }
