@@ -5,213 +5,218 @@
   "description": "Nextflow for ASCAT NGS",
   "type": "object",
   "definitions": {
-      "input_output_options": {
-          "title": "Input/output options",
-          "type": "object",
-          "fa_icon": "fas fa-terminal",
-          "description": "Define where the pipeline should find input data and save output data.",
-          "required": [
-              "outdir",
-              "cpus_counts",
-              "core_ref",
-              "cvn_sv",
-              "qc_genotype",
-              "pairs"
-          ],
-          "properties": {
-              "pairs": {
-                  "type": "string"
-              },
-              "outdir": {
-                  "type": "string",
-                  "format": "directory-path",
-                  "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
-                  "fa_icon": "fas fa-folder-open",
-                  "default": "results"
-              },
-              "cpus_counts": {
-                  "type": "integer",
-                  "default": 4
-              },
-              "core_ref": {
-                  "type": "string",
-                  "default": "ftp://ftp.sanger.ac.uk/pub/cancer/dockstore/human/GRCh38_hla_decoy_ebv/core_ref_GRCh38_hla_decoy_ebv.tar.gz"
-              },
-              "cvn_sv": {
-                  "type": "string",
-                  "default": "ftp://ftp.sanger.ac.uk/pub/cancer/dockstore/human/GRCh38_hla_decoy_ebv/CNV_SV_ref_GRCh38_hla_decoy_ebv_brass6+.tar.gz"
-              },
-              "qc_genotype": {
-                  "type": "string",
-                  "default": "ftp://ftp.sanger.ac.uk/pub/cancer/dockstore/human/GRCh38_hla_decoy_ebv/qcGenotype_GRCh38_hla_decoy_ebv.tar.gz"
-              }
-          }
-      },
-      "max_job_request_options": {
-          "title": "Max job request options",
-          "type": "object",
-          "fa_icon": "fab fa-acquisitions-incorporated",
-          "description": "Set the top limit for requested resources for any single job.",
-          "help_text": "If you are running on a smaller system, a pipeline step requesting more resources than are available may cause the Nextflow to stop the run with an error. These options allow you to cap the maximum resources requested by any single job so that the pipeline will run on your system.\n\nNote that you can not _increase_ the resources requested by any job using these options. For that you will need your own configuration file. See [the nf-core website](https://nf-co.re/usage/configuration) for details.",
-          "properties": {
-              "max_cpus": {
-                  "type": "integer",
-                  "description": "Maximum number of CPUs that can be requested for any single job.",
-                  "default": 32,
-                  "fa_icon": "fas fa-microchip",
-                  "hidden": true,
-                  "help_text": "Use to set an upper-limit for the CPU requirement for each process. Should be an integer e.g. `--max_cpus 1`"
-              },
-              "max_memory": {
-                  "type": "string",
-                  "description": "Maximum amount of memory that can be requested for any single job.",
-                  "default": "192 GB",
-                  "fa_icon": "fas fa-memory",
-                  "pattern": "^\\d+(\\.\\d+)?\\.?\\s*(K|M|G|T)?B$",
-                  "hidden": true,
-                  "help_text": "Use to set an upper-limit for the memory requirement for each process. Should be a string in the format integer-unit e.g. `--max_memory '8.GB'`"
-              },
-              "max_time": {
-                  "type": "string",
-                  "description": "Maximum amount of time that can be requested for any single job.",
-                  "default": "8h",
-                  "fa_icon": "far fa-clock",
-                  "pattern": "^(\\d+\\.?\\s*(s|m|h|d|day)\\s*)+$",
-                  "hidden": true,
-                  "help_text": "Use to set an upper-limit for the time requirement for each process. Should be a string in the format integer-unit e.g. `--max_time '2.h'`"
-              }
-          }
-      },
-      "generic_options": {
-          "title": "Generic options",
-          "type": "object",
-          "fa_icon": "fas fa-file-import",
-          "description": "Less common options for the pipeline, typically set in a config file.",
-          "help_text": "These options are common to all nf-core pipelines and allow you to customise some of the core preferences for how the pipeline runs.\n\nTypically these options would be set in a Nextflow config file loaded for all pipeline runs, such as `~/.nextflow/config`.",
-          "properties": {
-              "help": {
-                  "type": "boolean",
-                  "description": "Display help text.",
-                  "fa_icon": "fas fa-question-circle",
-                  "hidden": true
-              }
-          }
+    "input_output_options": {
+      "title": "Input/output options",
+      "type": "object",
+      "fa_icon": "fas fa-terminal",
+      "description": "Define where the pipeline should find input data and save output data.",
+      "required": [
+        "pairs",
+        "genome_fa",
+        "snp_gc_corr",
+        "gender_snps",
+        "cpus_counts",
+        "outdir"
+      ],
+      "properties": {
+        "pairs": {
+          "type": "string",
+          "description": "CSV file of input info, see docs/Usage"
+        },
+        "genome_fa": {
+          "type": "string",
+          "default": "genome.fa",
+          "description": "Genome fasta (expects co-located index)"
+        },
+        "snp_gc_corr": {
+          "type": "string",
+          "default": "SnpGcCorrections.tsv",
+          "description": "SNP loci and GC corrections file"
+        },
+        "gender_snps": {
+          "type": "string",
+          "default": "gender.tsv",
+          "description": "SNPs specific to Y chromosome"
+        },
+        "cpus_counts": {
+          "type": "integer",
+          "default": 4,
+          "description": "Increasing can reduce run time, however values over 4 are not recommended"
+        },
+        "outdir": {
+          "type": "string",
+          "format": "directory-path",
+          "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
+          "fa_icon": "fas fa-folder-open",
+          "default": "results"
+        }
       }
+    },
+    "max_job_request_options": {
+      "title": "Max job request options",
+      "type": "object",
+      "fa_icon": "fab fa-acquisitions-incorporated",
+      "description": "Set the top limit for requested resources for any single job.",
+      "help_text": "If you are running on a smaller system, a pipeline step requesting more resources than are available may cause the Nextflow to stop the run with an error. These options allow you to cap the maximum resources requested by any single job so that the pipeline will run on your system.\n\nNote that you can not _increase_ the resources requested by any job using these options. For that you will need your own configuration file. See [the nf-core website](https://nf-co.re/usage/configuration) for details.",
+      "properties": {
+        "max_cpus": {
+          "type": "integer",
+          "description": "Maximum number of CPUs that can be requested for any single job.",
+          "default": 32,
+          "fa_icon": "fas fa-microchip",
+          "hidden": true,
+          "help_text": "Use to set an upper-limit for the CPU requirement for each process. Should be an integer e.g. `--max_cpus 1`"
+        },
+        "max_memory": {
+          "type": "string",
+          "description": "Maximum amount of memory that can be requested for any single job.",
+          "default": "192 GB",
+          "fa_icon": "fas fa-memory",
+          "pattern": "^\\d+(\\.\\d+)?\\.?\\s*(K|M|G|T)?B$",
+          "hidden": true,
+          "help_text": "Use to set an upper-limit for the memory requirement for each process. Should be a string in the format integer-unit e.g. `--max_memory '8.GB'`"
+        },
+        "max_time": {
+          "type": "string",
+          "description": "Maximum amount of time that can be requested for any single job.",
+          "default": "8h",
+          "fa_icon": "far fa-clock",
+          "pattern": "^(\\d+\\.?\\s*(s|m|h|d|day)\\s*)+$",
+          "hidden": true,
+          "help_text": "Use to set an upper-limit for the time requirement for each process. Should be a string in the format integer-unit e.g. `--max_time '2.h'`"
+        }
+      }
+    },
+    "generic_options": {
+      "title": "Generic options",
+      "type": "object",
+      "fa_icon": "fas fa-file-import",
+      "description": "Less common options for the pipeline, typically set in a config file.",
+      "help_text": "These options are common to all nf-core pipelines and allow you to customise some of the core preferences for how the pipeline runs.\n\nTypically these options would be set in a Nextflow config file loaded for all pipeline runs, such as `~/.nextflow/config`.",
+      "properties": {
+        "help": {
+          "type": "boolean",
+          "description": "Display help text.",
+          "fa_icon": "fas fa-question-circle",
+          "hidden": true
+        }
+      }
+    }
   },
   "allOf": [
-      {
-          "$ref": "#/definitions/input_output_options"
-      },
-      {
-          "$ref": "#/definitions/max_job_request_options"
-      },
-      {
-          "$ref": "#/definitions/generic_options"
-      }
+    {
+      "$ref": "#/definitions/input_output_options"
+    },
+    {
+      "$ref": "#/definitions/max_job_request_options"
+    },
+    {
+      "$ref": "#/definitions/generic_options"
+    }
   ],
   "properties": {
-      "cpus_ascat": {
-          "type": "integer",
-          "default": 1,
-          "hidden": true
-      },
-      "report_dir": {
-          "type": "string",
-          "default": "/opt/bin/",
-          "hidden": true
-      },
-      "domain_keywords": {
-          "type": "string",
-          "default": "NA",
-          "hidden": true
-      },
-      "raci_owner": {
-          "type": "string",
-          "default": "NA",
-          "hidden": true
-      },
-      "tracedir": {
-          "type": "string",
-          "default": "results/pipeline_info",
-          "hidden": true
-      },
-      "container": {
-          "type": "string",
-          "default": "quay.io/lifebitai/ubuntu:18.10",
-          "hidden": true
-      },
-      "cpus": {
-          "type": "integer",
-          "default": 1,
-          "hidden": true
-      },
-      "memory": {
-          "type": "string",
-          "default": "1 GB",
-          "hidden": true
-      },
-      "disk": {
-          "type": "string",
-          "default": "30.GB",
-          "hidden": true
-      },
-      "config": {
-          "type": "string",
-          "default": "conf/standard.config",
-          "hidden": true
-      },
-      "echo": {
-          "type": "boolean",
-          "hidden": true
-      },
-      "errorStrategy": {
-          "type": "string",
-          "default": "{ task.exitStatus in [143,137,104,134,139] ? 'retry' : 'terminate' }",
-          "hidden": true
-      },
-      "maxRetries": {
-          "type": "integer",
-          "default": 9,
-          "hidden": true
-      },
-      "maxForks": {
-          "type": "integer",
-          "default": 200,
-          "hidden": true
-      },
-      "queueSize": {
-          "type": "integer",
-          "default": 200,
-          "hidden": true
-      },
-      "executor": {
-          "type": "boolean",
-          "hidden": true
-      },
-      "gls_bootDiskSize": {
-          "type": "string",
-          "default": "50.GB",
-          "hidden": true
-      },
-      "gls_preemptible": {
-          "type": "boolean",
-          "default": true,
-          "hidden": true
-      },
-      "zone": {
-          "type": "string",
-          "default": "us-east1-b",
-          "hidden": true
-      },
-      "network": {
-          "type": "string",
-          "default": "default",
-          "hidden": true
-      },
-      "subnetwork": {
-          "type": "string",
-          "default": "default",
-          "hidden": true
-      }
+    "cpus_ascat": {
+      "type": "integer",
+      "default": 1,
+      "hidden": true
+    },
+    "report_dir": {
+      "type": "string",
+      "default": "/opt/bin/",
+      "hidden": true
+    },
+    "domain_keywords": {
+      "type": "string",
+      "default": "NA",
+      "hidden": true
+    },
+    "raci_owner": {
+      "type": "string",
+      "default": "NA",
+      "hidden": true
+    },
+    "tracedir": {
+      "type": "string",
+      "default": "results/pipeline_info",
+      "hidden": true
+    },
+    "container": {
+      "type": "string",
+      "default": "quay.io/lifebitai/ubuntu:18.10",
+      "hidden": true
+    },
+    "cpus": {
+      "type": "integer",
+      "default": 1,
+      "hidden": true
+    },
+    "memory": {
+      "type": "string",
+      "default": "1 GB",
+      "hidden": true
+    },
+    "disk": {
+      "type": "string",
+      "default": "30.GB",
+      "hidden": true
+    },
+    "config": {
+      "type": "string",
+      "default": "conf/standard.config",
+      "hidden": true
+    },
+    "echo": {
+      "type": "boolean",
+      "hidden": true
+    },
+    "errorStrategy": {
+      "type": "string",
+      "default": "{ task.exitStatus in [143,137,104,134,139] ? 'retry' : 'terminate' }",
+      "hidden": true
+    },
+    "maxRetries": {
+      "type": "integer",
+      "default": 9,
+      "hidden": true
+    },
+    "maxForks": {
+      "type": "integer",
+      "default": 200,
+      "hidden": true
+    },
+    "queueSize": {
+      "type": "integer",
+      "default": 200,
+      "hidden": true
+    },
+    "executor": {
+      "type": "boolean",
+      "hidden": true
+    },
+    "gls_bootDiskSize": {
+      "type": "string",
+      "default": "50.GB",
+      "hidden": true
+    },
+    "gls_preemptible": {
+      "type": "boolean",
+      "default": true,
+      "hidden": true
+    },
+    "zone": {
+      "type": "string",
+      "default": "us-east1-b",
+      "hidden": true
+    },
+    "network": {
+      "type": "string",
+      "default": "default",
+      "hidden": true
+    },
+    "subnetwork": {
+      "type": "string",
+      "default": "default",
+      "hidden": true
+    }
   }
 }
