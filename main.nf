@@ -87,7 +87,7 @@ process ascat_counts {
         path('genome.fa.fai')
         path('snp.gc')
         path('sex.loci')
-        tuple val(groupId), val(type), val(sampleId), val(protocol), val(platform), file(htsfile), file(htsidx), val(purity), val(ploidy), file(isMale)
+        tuple val(groupId), val(type), val(sampleId), val(protocol), val(platform), file(htsfile), file(htsidx), val(purity), val(ploidy)
 
     output:
         tuple path("${sampleId}.count.gz"), path("${sampleId}.count.gz.tbi")
@@ -207,7 +207,7 @@ workflow {
     else {
         pairs = Channel.fromPath(params.pairs)
         case_control_map = pairs.splitCsv(header: true).map {
-            row -> tuple(row.groupId, row.type, row.sampleId, row.protocol, row.platform, file(row.reads), file(row.readIdx), row.purity, row.ploidy, file(row.isMale))
+            row -> tuple(row.groupId, row.type, row.sampleId, row.protocol, row.platform, file(row.reads), file(row.readIdx), row.purity, row.ploidy)
         }
     }
 
