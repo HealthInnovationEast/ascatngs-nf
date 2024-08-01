@@ -174,8 +174,8 @@ process ascat {
         """
         # remove logs for sucessful jobs
         export PCAP_THREADED_REM_LOGS=1
-        SPECIES=`head -n 2 ref/genome.fa.dict | tail -n 1 | perl -ne 'm/SP:([^\t]+)/;print \$1;'`
-        ASSEMBLY=`head -n 2 ref/genome.fa.dict | tail -n 1 | perl -ne 'm/AS:([^\t]+)/;print \$1;'`
+        SPECIES=`head -n 2 genome.fa.dict | tail -n 1 | perl -ne 'm/SP:([^\t]+)/;print \$1;'`
+        ASSEMBLY=`head -n 2 genome.fa.dict | tail -n 1 | perl -ne 'm/AS:([^\t]+)/;print \$1;'`
         ascat.pl -nb -f -o . \
             ${purity_val} \
             ${ploidy_val} \
@@ -183,7 +183,7 @@ process ascat {
             -pr "${protocol[ctrl_idx]}" -pl "${platform[ctrl_idx]}" \
             -r genome.fa \
             -sg snp.gc \
-            -g ${ismale[ctrl_idx]} \
+            -g ${isMale[ctrl_idx]} \
             -t ${counts[case_idx]} -tn ${sampleIds[case_idx]} \
             -n ${counts[ctrl_idx]} -nn ${sampleIds[ctrl_idx]} \
             -c $task.cpus
