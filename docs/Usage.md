@@ -1,5 +1,6 @@
 # Usage <!-- omit in toc -->
 
+- [Overview](#overview)
 - [Required args](#required-args)
   - [`--pairs`](#--pairs)
   - [`--genome_fa`](#--genome_fa)
@@ -8,6 +9,23 @@
   - [`--counts`](#--counts)
 - [Optional args](#optional-args)
   - [Max job request options](#max-job-request-options)
+
+## Overview
+
+The workflow can be used in 2 ways:
+
+1. BAM/CRAM sample inputs
+
+- Generates allele counts and sex verification for each sample (parallel processes)
+- Runs ASCAT
+
+2. `count.gz` + `is_male.txt` sample inputs
+
+- Runs ASCAT only
+
+Option (2) is intended for refinement of solution by providing refined purity & ploidy values.
+
+Both routes result in the same set of output files.
 
 ## Required args
 

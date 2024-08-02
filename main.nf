@@ -137,7 +137,7 @@ process ascat {
     publishDir {
         def case_idx = types.indexOf('case')
         def ctrl_idx = types.indexOf('control')
-        "${params.outdir}/${sampleIds[case_idx]}_vs_${sampleIds[ctrl_idx]}/ascat"
+        "${params.outdir}/${sampleIds[case_idx]}_vs_${sampleIds[ctrl_idx]}"
     }, mode: 'copy'
 
     // makes sure pipelines fail properly, plus errors and undef values
