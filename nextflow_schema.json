@@ -32,20 +32,20 @@
           "default": "gender.tsv",
           "description": "SNPs specific to Y chromosome"
         },
-        "counts": {
-          "type": "boolean"
-        },
         "cpus_counts": {
           "type": "integer",
           "default": 4,
           "description": "Increasing can reduce run time, however values over 4 are not recommended"
+        },
+        "counts": {
+          "type": "boolean"
         },
         "outdir": {
           "type": "string",
           "format": "directory-path",
           "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
           "fa_icon": "fas fa-folder-open",
-          "default": "results"
+          "default": "."
         }
       }
     },
@@ -134,7 +134,7 @@
     },
     "tracedir": {
       "type": "string",
-      "default": "results/pipeline_info",
+      "default": "./pipeline_info",
       "hidden": true
     },
     "container": {
