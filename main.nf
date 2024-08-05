@@ -162,6 +162,12 @@ process ascat {
         touch ${sampleIds[case_idx]}_vs_${sampleIds[ctrl_idx]}.copynumber.caveman.csv
         touch ${sampleIds[case_idx]}_vs_${sampleIds[ctrl_idx]}.samplestatistics.txt
         touch ${sampleIds[case_idx]}_vs_${sampleIds[ctrl_idx]}.copynumber.txt.gz
+        touch ${counts[case_idx]}.count.gz
+        touch ${counts[ctrl_idx]}.count.gz
+        touch ${counts[case_idx]}.count.gz.tbi
+        touch ${counts[ctrl_idx]}.count.gz.tbi
+        touch ${isMale[case_idx]}.is_male.txt
+        touch ${isMale[ctrl_idx]}.is_male.txt
         # others are from inputs
         """
 
