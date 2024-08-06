@@ -14,7 +14,16 @@ jobs:
       # On validates flow:
       #   Confirms workflow is valid
       #   Confirms all containers are available
-      - name: Validate workflow
-        # replace with command to execute sample
+      - name: Validate bam input
         run: |
-          nextflow -version
+          nextflow run main.nf \
+            -profile test -stub-run \
+            --pairs test_files/colo-cram.csv \
+            --outdir full_results
+      - name: Validate counts input
+        run: |
+          nextflow run main.nf \
+            -profile test -stub-run \
+            --counts \
+            --pairs test_files/colo-counts.csv \
+            --outdir count_results
