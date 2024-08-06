@@ -1,0 +1,3 @@
+groupId,sampleId,type,protocol,platform,reads,readIdx,purity,ploidy,isMale
+1,COLO-829,case,WGS,ILLUMINA,TESTDATA/full_results/COLO-829_vs_COLO-829-BL/COLO-829.count.gz,TESTDATA/full_results/COLO-829_vs_COLO-829-BL/COLO-829.count.gz.tbi,NA,NA,TESTDATA/full_results/COLO-829_vs_COLO-829-BL/COLO-829.is_male.txt
+1,COLO-829-BL,case,WGS,ILLUMINA,TESTDATA/full_results/COLO-829_vs_COLO-829-BL/COLO-829-BL.count.gz,TESTDATA/full_results/COLO-829_vs_COLO-829-BL/COLO-829-BL.count.gz.tbi,NA,NA,TESTDATA/full_results/COLO-829_vs_COLO-829-BL/COLO-829-BL.is_male.txt

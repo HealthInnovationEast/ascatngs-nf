@@ -1,0 +1,3 @@
+groupId,sampleId,type,protocol,platform,reads,readIdx,purity,ploidy,isMale
+1,COLO-829,case,WGS,ILLUMINA,TESTDATA/GRCh37/COLO-829.cram,TESTDATA/GRCh37/COLO-829.cram.crai,NA,NA,NA
+1,COLO-829-BL,control,WGS,ILLUMINA,TESTDATA/GRCh37/COLO-829-BL.cram,TESTDATA/GRCh37/COLO-829-BL.cram.crai,NA,NA,NA
