@@ -15,6 +15,16 @@ Nextflow pipeline for using [ascatNgs]
 
 See [ascatNgs changes][ascatngs-changes] or [ascatNgs releases][ascatngs-releases]
 
+## Development and Release process
+
+Please use HubFlow methodology to prepare features, releases and hotfixes.
+
+### Finalising a release
+
+1. Update version in [`nextflow.config`](nextflow.config)
+1. Update [Version mapping](#version-mapping) table
+1. Complete [`CHANGES.md`](CHANGES.md)
+
 <!-- refs -->
 
 [ascatngs]: https://github.com/cancerit/ascatNgs
